@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tilburg Speurtocht</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Delius+Swash+Caps&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    html, body {
+      font-family: 'Poiret One', cursive;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      min-height: 100vh;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Topografische_kaart_Tilburg_2020.jpg') no-repeat center center fixed;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+      color: white;
+      background-size: cover;
+      color: white;
+    }
+    .container {
+      background-color: rgba(9, 34, 255, 0.5);
+      width: 90%;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    h1, h2, p {
+      margin-bottom: 1rem;
+    }
+    input[type="text"] {
+      background-color: #0922ff;
+      opacity: 1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-family: 'Delius Swash Caps', cursive;
+    }
+    button:hover {
+      background-color: #e0e0e0;
+    }
+    .step {
+      display: none;
+      margin-top: 2rem;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .step.active {
+      display: block;
+    }
+    .correct-message {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ffff66;
+      margin-top: 1rem;
+      animation: pop 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      input[type="text"], button {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="intro">
+      <p>Welkom allemaal bij deze kei leuke speurtocht door Tilburg! Hopelijk hebben we er een beetje zin in, want we gaan lekker veel puzzelen vandaag.</p>
+      <button onclick="startQuest()" style="font-family: 'Delius Swash Caps', cursive;">Start</button>
+    </div>
+    <h1>Tilburg Speurtocht</h1>
+
+    <div class="step" id="step1">
+      <p><strong>Startpunt – De Heuvel</strong></p>
+      <p>In welk café in Tilburg kun je 'goesting' krijgen in Belgische bieren?</p>
+      <input type="text" id="answer1">
+      <button onclick="checkAnswer(1, 'goesting')">Controleer</button>
+      <p id="feedback1"></p>
+    </div>
+
+    <div class="step" id="step2">
+      <p><strong>Goesting</strong></p>
+      <p>Van hieruit fiets je naar een café dat klinkt als een hoofdstad, maar dan iets alternatiever. Welk café?</p>
+      <input type="text" id="answer2">
+      <button onclick="checkAnswer(2, 'berlijn')">Controleer</button>
+      <p id="feedback2"></p>
+    </div>
+
+    <div class="step" id="step3">
+      <p><strong>Café Berlijn</strong></p>
+      <p>Op weg naar de zomer, is er een café dat je er alvast laat van proeven. Welk café?</p>
+      <input type="text" id="answer3">
+      <button onclick="checkAnswer(3, 'zomerlust')">Controleer</button>
+      <p id="feedback3"></p>
+    </div>
+
+    <div class="step" id="step4">
+      <p><strong>Café Zomerlust</strong></p>
+      <p>Als je rust en spiritualiteit zoekt onder het genot van een biertje, waar ga je dan heen?</p>
+      <input type="text" id="answer4">
+      <button onclick="checkAnswer(4, 'koningshoeven')">Controleer</button>
+      <p id="feedback4"></p>
+    </div>
+
+    <div class="step" id="step5">
+      <p><strong>Trappistenklooster Koningshoeven</strong></p>
+      <p>De tocht zit erop. Waar ga je nu naar toe om bij te komen?</p>
+      <input type="text" id="answer5">
+      <button onclick="checkAnswer(5, 'thuis')">Controleer</button>
+      <p id="feedback5"></p>
+    </div>
+
+    <div class="step" id="final">
+      <h2>Gefeliciteerd!</h2>
+      <p>Jullie hebben alle locaties gevonden. Tijd om lekker te ontspannen!</p>
+    </div>
+  </div>
+
+  <script>
+    function launchConfetti() {
+  const duration = 2500;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 10,
+      angle: 60,
+      spread: 75,
+      startVelocity: 45,
+      scalar: 0.8,
+      origin: { x: 0 },
+      colors: ['#ffffff', '#ffd1dc', '#ccf2ff', '#ffffcc', '#e6e6fa']
+    });
+    confetti({
+      particleCount: 10,
+      angle: 120,
+      spread: 75,
+      startVelocity: 45,
+      scalar: 0.8,
+      origin: { x: 1 },
+      colors: ['#ffffff', '#ffd1dc', '#ccf2ff', '#ffffcc', '#e6e6fa']
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
+}
+
+    function startQuest() {
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('step1').classList.add('active');
+    }
+
+    function checkAnswer(step, correctAnswer) {
+  const input = document.getElementById(`answer${step}`).value.trim().toLowerCase();
+  const feedback = document.getElementById(`feedback${step}`);
+  const hints = {
+    goesting: 'Goed gedaan! Je volgende bestemming is een alternatieve hoofdstad van gezelligheid: Berlijn.',
+    berlijn: 'Lekker bezig! Tijd voor een zomers drankje in een buitengelegen café.',
+    zomerlust: 'Klinkt goed! Voor de volgende locatie zoek je rust, stilte en trappistenbier.',
+    koningshoeven: 'De laatste etappe: tijd om af te sluiten waar je je het meest thuis voelt.',
+    thuis: 'Jullie hebben het gehaald, gefeliciteerd!'
+  };
+
+  if (input === correctAnswer) {
+    feedback.innerHTML = `
+      <span class="correct-message">Correct!</span>
+      <div style="margin-top: 1.5rem;">
+        <p><strong>Aanwijzing:</strong> ${hints[correctAnswer]}</p>
+        ${step < 5 ? `<button onclick="nextStep(${step + 1})">Verder</button>` : ''}
+      </div>`;
+    launchConfetti();
+  } else {
+    feedback.textContent = "Helaas, probeer opnieuw.";
+  }
+} else {
+    feedback.textContent = "Helaas, probeer opnieuw.";
+  }
+}
+
+function nextStep(nextStepNumber) {
+  document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+  document.getElementById(`step${nextStepNumber}`).classList.add('active');
+}`).value.trim().toLowerCase();
+      const feedback = document.getElementById(`feedback${step}`);
+      if (input === correctAnswer) {
+        feedback.innerHTML = '<span class="correct-message">Correct!</span>';
+        launchConfetti();
+        document.getElementById(`step${step}`).classList.remove('active');
+        if (step < 5) {
+          document.getElementById(`step${step + 1}`).classList.add('active');
+        } else {
+          document.getElementById('final').classList.add('active');
+        }
+      } else {
+        feedback.textContent = "Helaas, probeer opnieuw.";
+      }
+    }
+  </script>
+</body>
+</html>
